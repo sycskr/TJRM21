@@ -1,6 +1,8 @@
+/*´úÂë°æ±¾²âÊÔ*/
 #include<iostream>
 #include<opencv2/opencv.hpp>
 #include<vector>
+
 
 namespace cv
 {
@@ -8,18 +10,18 @@ namespace cv
     {
         using namespace cv;
 
-        //é£é•–å¼•å¯¼ç¯å°ºå¯¸object size å•ä½mm
+        //·ÉïÚÒıµ¼µÆ³ß´çobject size µ¥Î»mm
         const double halfwidth =  5.5 / 2.0;
         const double halfheight = 5.5 / 2.0;
         std::vector<Point3f> obj
                 {
-                        Point3f(-halfwidth,  halfheight, 0),   //tlå·¦ä¸Š
-                        Point3f( halfwidth,  halfheight, 0),   //trå³ä¸Š
-                        Point3f( halfwidth, -halfheight, 0),   //brå³ä¸‹
-                        Point3f(-halfwidth, -halfheight, 0)    //blå·¦ä¸‹
+                        Point3f(-halfwidth,  halfheight, 0),   //tl×óÉÏ
+                        Point3f( halfwidth,  halfheight, 0),   //trÓÒÉÏ
+                        Point3f( halfwidth, -halfheight, 0),   //brÓÒÏÂ
+                        Point3f(-halfwidth, -halfheight, 0)    //bl×óÏÂ
                 };
 
-        //ç›¸æœºæ ‡å®šå‚æ•°ï¼š
+        //Ïà»ú±ê¶¨²ÎÊı£º
         Mat cameraMatrix = Mat::zeros(3, 3, CV_64FC1);
         cameraMatrix.at<double>(0, 0) = 1386.659138037379;
         cameraMatrix.at<double>(0, 2) = 322.5162041924799;
@@ -66,16 +68,16 @@ namespace cv
 }
 
 int main(){
-//    æ‘„åƒå¤´æ¨¡å¼ï¼š
+//    ÉãÏñÍ·Ä£Ê½£º
 //    cv::VideoCapture cap(0);
 //        if (!cap.isOpened())
 //    {
 //        std::cout << "Cannot open the camera" << std::endl;
 //        return -1;
 //    }
-    //è§†é¢‘æ¨¡å¼ï¼š
+    //ÊÓÆµÄ£Ê½£º
     cv::VideoCapture cap;
-    cap.open("/home/syc/æ¡Œé¢/é£é•–/out2.avi");
+    cap.open("/home/syc/×ÀÃæ/·ÉïÚ/out2.avi");
 
 
     struct color{
@@ -89,8 +91,8 @@ int main(){
         int iHighV ;
     }project_color[3];
 
-    ////é¢œè‰²è®¾ç½® 0,1,2çº¢è‰²,ç»¿è‰²,è“è‰²
-    //çº¢è‰²
+    ////ÑÕÉ«ÉèÖÃ 0,1,2ºìÉ«,ÂÌÉ«,À¶É«
+    //ºìÉ«
     project_color[0].iLowH=170;
     project_color[0].iHighH=180;
     project_color[0].iLowH1=0;
@@ -99,7 +101,7 @@ int main(){
     project_color[0].iHighS=255;
     project_color[0].iLowV=46;
     project_color[0].iHighV=255;
-    //ç»¿è‰²
+    //ÂÌÉ«
     project_color[1].iLowH=60;
     project_color[1].iHighH=100;
     project_color[1].iLowH1=0;
@@ -108,7 +110,7 @@ int main(){
     project_color[1].iHighS=255;
     project_color[1].iLowV=90;
     project_color[1].iHighV=255;
-    //è“è‰²
+    //À¶É«
     project_color[2].iLowH=100;
     project_color[2].iHighH=140;
     project_color[2].iLowH1=0;
@@ -118,7 +120,7 @@ int main(){
     project_color[2].iLowV=90;
     project_color[2].iHighV=255;
 
-    //é¢œè‰²æ¨¡å¼ï¼š0,1,2çº¢è‰²,ç»¿è‰²,è“è‰²
+    //ÑÕÉ«Ä£Ê½£º0,1,2ºìÉ«,ÂÌÉ«,À¶É«
     int NUM=1;
 
     while(1){
@@ -133,68 +135,68 @@ int main(){
         cv::Mat imgHSV; 
         std::vector<cv::Mat>hsvSplit;
         cv::cvtColor(imgOriginal,imgHSV,cv::COLOR_BGR2HSV);
-        cv::split(imgHSV,hsvSplit);//å°†å›¾ç‰‡é¢œè‰²é€šé“åˆ†ç¦»
-        cv::equalizeHist(hsvSplit[2],hsvSplit[2]);//ç›´æ–¹å›¾å‡è¡¡åŒ–ï¼Œæå‡å¯¹æ¯”åº¦
-        cv::merge(hsvSplit,imgHSV);//å„ä¸ªé€šé“è¿›è¡Œåˆå¹¶
+        cv::split(imgHSV,hsvSplit);//½«Í¼Æ¬ÑÕÉ«Í¨µÀ·ÖÀë
+        cv::equalizeHist(hsvSplit[2],hsvSplit[2]);//Ö±·½Í¼¾ùºâ»¯£¬ÌáÉı¶Ô±È¶È
+        cv::merge(hsvSplit,imgHSV);//¸÷¸öÍ¨µÀ½øĞĞºÏ²¢
         cv::Mat imgThresholded;
         cv::inRange(imgHSV,cv::Scalar(project_color[NUM].iLowH,project_color[NUM].iLowS,project_color[NUM].iLowV),cv::Scalar(project_color[NUM].iHighH,project_color[NUM].iHighS,project_color[NUM].iHighV),imgThresholded);
 
          
         
-        //å½¢æ€å­¦å¤„ç† å»é™¤ä¸€äº›å™ªç‚¹
-        cv::Mat element =cv::getStructuringElement(cv::MORPH_RECT,cv::Size(5,5));//å®šä¹‰ kernel çŸ©é˜µ
-        cv::morphologyEx(imgThresholded,imgThresholded,cv::MORPH_OPEN,element);//å¼€è¿ç®—
-        cv::morphologyEx(imgThresholded,imgThresholded,cv::MORPH_CLOSE,element);//é—­è¿ç®—
-        //å¯¹ç°åº¦å›¾è¿›è¡Œæ»¤æ³¢
+        //ĞÎÌ¬Ñ§´¦Àí È¥³ıÒ»Ğ©Ôëµã
+        cv::Mat element =cv::getStructuringElement(cv::MORPH_RECT,cv::Size(5,5));//¶¨Òå kernel ¾ØÕó
+        cv::morphologyEx(imgThresholded,imgThresholded,cv::MORPH_OPEN,element);//¿ªÔËËã
+        cv::morphologyEx(imgThresholded,imgThresholded,cv::MORPH_CLOSE,element);//±ÕÔËËã
+        //¶Ô»Ò¶ÈÍ¼½øĞĞÂË²¨
         cv::GaussianBlur(imgThresholded,imgThresholded,cv::Size(3,3),0,0);
 
-        //è¾¹ç¼˜æ£€æµ‹
+        //±ßÔµ¼ì²â
         cv::Mat cannyImage;
-        cv::Canny(imgThresholded,cannyImage,128,255,3);//é‡‡ç”¨ CANNY ç®—æ³•å‘ç°è¾“å…¥å›¾åƒçš„è¾¹ç¼˜è€Œä¸”åœ¨è¾“å‡ºå›¾åƒä¸­æ ‡è¯†è¿™äº›è¾¹ç¼˜
+        cv::Canny(imgThresholded,cannyImage,128,255,3);//²ÉÓÃ CANNY Ëã·¨·¢ÏÖÊäÈëÍ¼ÏñµÄ±ßÔµ¶øÇÒÔÚÊä³öÍ¼ÏñÖĞ±êÊ¶ÕâĞ©±ßÔµ
 
-        //è½®å»“æå–
+        //ÂÖÀªÌáÈ¡
         std::vector<std::vector<cv::Point> > contours;
         std::vector<cv::Vec4i> hierarchy;
         cv::findContours(cannyImage,contours,hierarchy,cv::RETR_EXTERNAL,cv::CHAIN_APPROX_SIMPLE,cv::Point(0,0));
-        //mode:cv::RETR_EXTERNALåªæ£€æµ‹æœ€å¤–å›´è½®å»“ï¼ŒåŒ…å«åœ¨å¤–å›´è½®å»“å†…çš„å†…å›´è½®å»“è¢«å¿½ç•¥
-        // method:cv::CHAIN_APPROX_SIMPLEåªæ£€æµ‹æœ€å¤–å±‚è½®å»“ï¼Œå¹¶ä¸”ä¿å­˜è½®å»“ä¸Šæ‰€æœ‰ç‚¹
+        //mode:cv::RETR_EXTERNALÖ»¼ì²â×îÍâÎ§ÂÖÀª£¬°üº¬ÔÚÍâÎ§ÂÖÀªÄÚµÄÄÚÎ§ÂÖÀª±»ºöÂÔ
+        // method:cv::CHAIN_APPROX_SIMPLEÖ»¼ì²â×îÍâ²ãÂÖÀª£¬²¢ÇÒ±£´æÂÖÀªÉÏËùÓĞµã
 
 
 
-        //ç»˜åˆ¶è½®å»“
+        //»æÖÆÂÖÀª
         for(int i=0;i<(int)contours.size();i++){
             cv::drawContours(cannyImage,contours,i,cv::Scalar(255),1,8);
         }
-        cv::imshow("å¤„ç†åçš„å›¾å½¢",cannyImage);
+        cv::imshow("´¦ÀíºóµÄÍ¼ĞÎ",cannyImage);
         
-        //ç”¨çŸ©å½¢åœˆå‡ºè½®å»“å¹¶è¿”å›ä½ç½®åæ ‡
-        //è®¾ç½®åˆå§‹è½®å»“é¢ç§¯
+        //ÓÃ¾ØĞÎÈ¦³öÂÖÀª²¢·µ»ØÎ»ÖÃ×ø±ê
+        //ÉèÖÃ³õÊ¼ÂÖÀªÃæ»ı
 //        std::vector<cv::Point> pointsBegin=contours[0];
 //        cv::RotatedRect boxBegin=cv::minAreaRect(cv::Mat(pointsBegin));
 //        cv::Rect boxRectBegin =boxBegin.boundingRect();
 //        float AreaBefore=boxRectBegin.area();
-        //å¼€å§‹å¾ªç¯
+        //¿ªÊ¼Ñ­»·
         for(int i=0;i<contours.size();i++){
-            //æ¯ä¸ªè½®å»“
+            //Ã¿¸öÂÖÀª
             std::vector<cv::Point> points=contours[i];
-            //å¯¹ç»™å®šçš„ç‚¹é›†ï¼Œå¯»æ‰¾æœ€å°é¢ç§¯çš„åŒ…å›´çŸ©å½¢
+            //¶Ô¸ø¶¨µÄµã¼¯£¬Ñ°ÕÒ×îĞ¡Ãæ»ıµÄ°üÎ§¾ØĞÎ
             cv::RotatedRect box=cv::minAreaRect(cv::Mat(points));//points
-            //ç­›é€‰ï¼š
+            //É¸Ñ¡£º
             cv::Rect boxRect =box.boundingRect();
             if(boxRect.width/boxRect.height>=1.2)continue;
-            //å¦‚æœå®½æ¯”é«˜é•¿è¿‡å¤šï¼Œåˆ™ä¸ç”»æ¡†
+            //Èç¹û¿í±È¸ß³¤¹ı¶à£¬Ôò²»»­¿ò
             if(boxRect.height/boxRect.width>=1.2)continue;
-            //å¦‚æœé«˜æ¯”å®½è¿‡å¤šï¼Œåˆ™ä¸ç”»æ¡†
+            //Èç¹û¸ß±È¿í¹ı¶à£¬Ôò²»»­¿ò
             if(box.angle+90>=15&&box.angle+90<=85)continue;
-            //å¦‚æœå¤ªæ–œï¼Œåˆ™ä¸è¦
+            //Èç¹ûÌ«Ğ±£¬Ôò²»Òª
             if(boxRect.area()<200)continue;
-            //å¦‚æœå¤ªå°ï¼Œåˆ™ä¸è¦
+            //Èç¹ûÌ«Ğ¡£¬Ôò²»Òª
 
 
             std::cout<<"angle:"<<box.angle+90;
 
             //AreaBefore=boxRect.area();
-            // //***************æµ‹è·***********************
+            // //***************²â¾à***********************
 
             std::vector<cv::Point2f> Points2fVec;
             cv::Point2f points2f[4];
@@ -212,7 +214,7 @@ int main(){
 
 
             PNPsolver(Points2fVec,distance,angels,euroangels);
-            if(distance==0)continue;//bugï¼šæ‰“å°æ–‡å­—çš„æ—¶å€™ï¼Œé‡åˆ°æœ‰ä¸€å¤„distance=0ä¼šç›´æ¥é—ªé€€
+            if(distance==0)continue;//bug£º´òÓ¡ÎÄ×ÖµÄÊ±ºò£¬Óöµ½ÓĞÒ»´¦distance=0»áÖ±½ÓÉÁÍË
             std::cout<<"distance:"<<distance<<std::endl;
 
             // //*****************************************
@@ -224,13 +226,13 @@ int main(){
             
             cv::Point2f vertex[4];
             box.points(vertex);
-            //ç»˜åˆ¶
+            //»æÖÆ
             cv::line(imgOriginal,vertex[0],vertex[1],cv::Scalar(100,200,211),6,cv::LINE_AA);
             cv::line(imgOriginal,vertex[1],vertex[2],cv::Scalar(100,200,211),6,cv::LINE_AA);
             cv::line(imgOriginal,vertex[2],vertex[3],cv::Scalar(100,200,211),6,cv::LINE_AA);
             cv::line(imgOriginal,vertex[3],vertex[0],cv::Scalar(100,200,211),6,cv::LINE_AA);
 
-            //ç»˜åˆ¶ä¸­å¿ƒ
+            //»æÖÆÖĞĞÄ
             cv::Point s1,l,r,u,d;
             s1.x=((vertex[0].x+vertex[2].x)/2.0);
             s1.y=((vertex[0].y+vertex[2].y)/2.0);
@@ -248,9 +250,9 @@ int main(){
             cv::line(imgOriginal,l,r,cv::Scalar(100,200,211),2,cv::LINE_AA);
             cv::line(imgOriginal,u,d,cv::Scalar(100,200,211),2,cv::LINE_AA);
 
-            //æµ‹è·
+            //²â¾à
             std::string msg = cv::format("D:%.2f", distance / 1000);
-            ////æ‰“åœ¨æ¡†ä¸‹æ–¹
+            ////´òÔÚ¿òÏÂ·½
 //            cv::Point textOrigin1(box.center.x - 20, box.center.y+60 );
 //            cv::putText(imgOriginal, msg, textOrigin1, 1, 1, cv::Scalar(0, 255, 0));
 //
@@ -262,7 +264,7 @@ int main(){
 //            cv::Point textOrigin3(box.center.x - 20, box.center.y  +60+ 40);
 //            cv::putText(imgOriginal, msg, textOrigin3, 1, 1, cv::Scalar(0, 255, 0));
 
-            ////æ‰“åœ¨å·¦ä¸Šè§’
+            ////´òÔÚ×óÉÏ½Ç
             cv::Point textOrigin1(20, 60 );
             cv::putText(imgOriginal, msg, textOrigin1, 1, 1, cv::Scalar(0, 255, 0));
 
@@ -275,9 +277,9 @@ int main(){
             cv::putText(imgOriginal, msg, textOrigin3, 1, 1, cv::Scalar(0, 255, 0));
             
         }
-        cv::namedWindow("ç»˜åˆ¶",cv::WINDOW_NORMAL);
+        cv::namedWindow("»æÖÆ",cv::WINDOW_NORMAL);
 
-        cv::imshow("ç»˜åˆ¶",imgOriginal);
+        cv::imshow("»æÖÆ",imgOriginal);
         char key =(char)cv::waitKey(30);
         if(key==27) break;
 
